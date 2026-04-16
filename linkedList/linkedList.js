@@ -76,11 +76,82 @@ LinkedList.prototype.deleteAt = function (index) {
 };
 
 LinkedList.prototype.middle = function (head) {
-		let slow = head;
-		let fast = head;
-		while (fast.next != null && fast.next.next != null) {
-			slow = slow.next;
-			fast = fast.next.next;
-		}
-		return fast.next == null ? slow : slow.next;
+  let slow = head;
+  let fast = head;
+  while (fast.next != null && fast.next.next != null) {
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+  return fast.next == null ? slow : slow.next;
+};
+
+LinkedList.prototype.reverse = function (head) {
+  let slow = head;
+  let fast = head.next;
+  while (fast) {
+    slow.next = fast.next;
+    fast.next = head;
+    head = fast;
+    fast = slow.next;
+  }
+  return head;
+};
+
+LinkedList.prototype.hasCycle = function (head) {
+  let seenNodes = new Set();
+  let curr = head;
+  while (curr) {
+    if (seenNodes.has(curr)) {
+      return true;
+    }
+    seenNodes.add(curr);
+    curr = curr.next;
+  }
+  return false;
+};
+
+LinkedList.prototype.hasCycleUsingFloyd = function (head) {
+  let slow = head;
+  let fast = head.next;
+  while (slow != fast) {
+    if (!fast || !fast.next) return false;
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+  return true;
+};
+
+LinkedList.prototype.isPalindrome = function (head) {
+	if (!head.next) return true;
+  // calculate middle
+  let slow = head;
+  let fast = head;
+
+  while (fast && fast.next) {
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+
+  // Middle second half
+  let middle = slow;
+  let start = middle;
+  let end = middle.next;
+  while (end) {
+    start.next = end.next;
+    end.next = middle;
+    middle = end;
+    end = start.next;
+  }
+
+  // Compare the first and second half
+  let curr = head;
+  while (middle) {
+    if (curr.val != middle.val) {
+      return false;
+    }
+    middle = middle.next;
+    curr = curr.next;
+  }
+
+  return true;
 };
