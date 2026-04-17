@@ -1,5 +1,5 @@
 function Node(val) {
-  this.val = val;
+  this.val = val ? val : 0;
   this.next = null;
 }
 
@@ -122,7 +122,7 @@ LinkedList.prototype.hasCycleUsingFloyd = function (head) {
 };
 
 LinkedList.prototype.isPalindrome = function (head) {
-	if (!head.next) return true;
+  if (!head.next) return true;
   // calculate middle
   let slow = head;
   let fast = head;
@@ -154,4 +154,109 @@ LinkedList.prototype.isPalindrome = function (head) {
   }
 
   return true;
+};
+
+LinkedList.prototype.isIntersecting = function (headA, headB) {
+  let currA = headA;
+  let currB = headB;
+  let setB = new Set();
+  while (currB) {
+    setB.add(currB);
+    currB = currB.next;
+  }
+
+  while (currA) {
+    if (setB.has(currA)) {
+      return currA;
+    }
+    currA = currA.next;
+  }
+  return null;
+};
+
+LinkedList.prototype.removeElements = function (head, val) {
+  let prev = null;
+  while (head && head.val == val) {
+    head = head.next;
+  }
+  let curr = head;
+  while (curr) {
+    if (curr.val == val) {
+      if (prev) prev.next = curr.next;
+    } else {
+      prev = curr;
+    }
+    curr = curr.next;
+  }
+  return head;
+};
+
+LinkedList.prototype.removeFromEnd = function (head, nFromEnd) {
+  // reverse the LinkedList
+  let slow = head;
+  let fast = head.next;
+  while (fast && fast.next) {
+    slow.next = fast.next;
+    fast.next = head;
+    head = fast;
+    fast = slow.next;
+  }
+
+  let curr = head;
+  for (let i = 0; i < nFromEnd - 2; i++) {
+    curr = curr.next;
+  }
+  curr.next = curr.next.next;
+
+  slow = head;
+  fast = head.next;
+  while (fast && fast.next) {
+    slow.next = fast.next;
+    fast.next = head;
+    head = fast;
+    fast = slow.next;
+  }
+  return head;
+};
+
+LinkedList.prototype.removeFromEnd2 = function (head, nFromEnd) {
+  let store = new Set();
+  let curr = head;
+  while (curr) {
+    store.add(curr);
+    curr = curr.next;
+  }
+
+  const nFromStart = store.size - nFromEnd;
+  if (nFromStart == 0) {
+    head = head.next;
+  } else {
+    curr = head;
+    for (let i = 0; i < nFromStart - 1; i++) {
+      curr = curr.next;
+    }
+    curr.next = curr.next.next;
+  }
+
+  return head;
+};
+
+LinkedList.removeElementFromEndUsingOnePass = function (head, n) {
+  if (!head) return head;
+  const sentinel = new Node();
+  sentinel.next = head;
+  let slow = sentinel;
+  let fast = head;
+  let i = 0;
+  while (fast) {
+    if (i < n) {
+      fast = fast.next;
+      i++;
+    } else {
+      slow = slow.next;
+      fast = fast.next;
+    }
+  }
+  slow.next = slow.next.next;
+  return sentinel.next;
 };
