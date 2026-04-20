@@ -260,3 +260,90 @@ LinkedList.removeElementFromEndUsingOnePass = function (head, n) {
   slow.next = slow.next.next;
   return sentinel.next;
 };
+
+LinkedList.prototype.deleteDuplicateFromSorted = function (head) {
+  if (!head) return head;
+  let slow = head;
+  let fast = head.next;
+  while (fast) {
+    if (slow.val === fast.val) {
+      slow.next = fast.next;
+    } else {
+      slow = slow.next;
+    }
+    fast = fast.next;
+  }
+  return head;
+};
+
+LinkedList.prototype.deleteDuplicateFromSortedUsingOnePointer = function (
+  head,
+) {
+  let curr = head;
+  while (curr && curr.next) {
+    if (curr.val === curr.next.val) {
+      curr.next = curr.next.next;
+    } else {
+      curr = curr.next;
+    }
+  }
+  return head;
+};
+
+LinkedList.prototype.oddEventList = function (head) {
+  if (!head) return head;
+  let odd = head;
+  let even = head.next;
+  let headEven = even;
+  while (even) {
+    odd.next = even.next;
+    even.next = odd.next ? odd.next.next : null;
+    if (odd.next) odd = odd.next;
+    even = even.next;
+  }
+  odd.next = headEven;
+  return head;
+};
+
+LinkedList.prototype.addTwoNumbers = function (l1, l2) {
+  let carry = 0;
+  let headB = l2;
+
+  while (l1 || l2) {
+    const val1 = l1 ? l1.val : 0;
+    const val2 = l2.val ? l2.val : 0;
+    const sum = carry + val1 + val2;
+    carry = Math.floor(sum / 10);
+    const newVal = sum % 10;
+    if (l2) {
+      l2.val = newVal;
+    } else {
+      node = new Node(newVal);
+      l2 = node;
+    }
+    if (l1) l1 = l1.next;
+    if (!l2.next && l1) {
+      l2.next = new Node();
+    }
+    l2 = l2.next;
+  }
+  if (carry) l2.val = carry;
+  return headB;
+};
+
+LinkedList.prototype.mergeTwoSortedList = function (list1, list2) {
+  let dummy = new Node();
+  let dummyHead = dummy;
+  while (list1 || list2) {
+    if (list1.val < list2.val) {
+      dummy.next = new Node(list1.val);
+      list1.next && (list1 = list1.next);
+    } else {
+      dummy.next = new Node(list2.val);
+      list2.next && (list2 = list2.next);
+    }
+    dummy = dummy.next;
+  }
+  return dummyHead.next;
+};
+
