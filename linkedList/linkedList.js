@@ -440,3 +440,37 @@ LinkedList.prototype.swapPairs = function (first, second) {
   head.next = first.next ? this.swapPairs(first.next, first.next.next) : null;
   return head;
 };
+
+LinkedList.prototype.intersectUsingTwoPointer = function (headA, headB) {
+  // Calculate length of both LinkedList
+  let currA = headA;
+  let lengthA = 0;
+  while (currA) {
+    lengthA++;
+    currA = currA.next;
+  }
+
+  let currB = headB;
+  let lengthB = 0;
+  while (currB) {
+    lengthB++;
+    currB = currB.next;
+  }
+
+  const diff = Math.abs(lengthA - lengthB);
+  const bigLL = lengthB > lengthA ? headB : headA;
+  const shortLL = lengthB > lengthA ? headA : headB;
+  currA = headA;
+  currB = headB;
+
+  for (let i = 0; i < diff; i++) {
+    bigLL = bigLL.next;
+  }
+
+  while (shortLL != bigLL) {
+    shortLL = shortLL.next;
+    bigLL = bigLL.next;
+  }
+
+  return shortLL;
+};
