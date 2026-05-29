@@ -5,7 +5,7 @@ var strStr = function (haystack, needle) {
   let m = haystack.length;
   let n = needle.length;
 
-  // Calculate the LPS array
+  // Calculate the LPS (Longest Prefix Suffix) array
   while (j < n) {
     if (needle[i] == needle[j]) {
       lps[j] = i + 1;
