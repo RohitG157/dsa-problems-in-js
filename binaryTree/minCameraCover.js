@@ -1,12 +1,33 @@
+const HAS_CAMERA = 0;
+const COVERED = 1;
+const NEEDS_COVERAGE = 2;
+
 var minCameraCover = function (root) {
-  function traverse(left, right) {
-    if (!left && !right) return 0;
-    if (!left || !right) return 1;
+  let cameras = 0;
 
-    let leftC = traverse(left.left, left.right);
-    let rightC = traverse(right.left, right.right);
+  function dfs(node) {
+    if (!node) {
+      return COVERED;
+    }
 
-    return leftC + rightC;
+    const left = dfs(node.left);
+    const right = dfs(node.right);
+
+    if (left === NEEDS_COVERAGE || right === NEEDS_COVERAGE) {
+      cameras++;
+      return HAS_CAMERA;
+    }
+
+    if (left === HAS_CAMERA || right === HAS_CAMERA) {
+      return COVERED;
+    }
+
+    return NEEDS_COVERAGE;
   }
-  return traverse(root.left, root.right);
+
+  if (dfs(root) === NEEDS_COVERAGE) {
+    cameras++;
+  }
+
+  return cameras;
 };
